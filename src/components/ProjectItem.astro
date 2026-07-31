@@ -1,0 +1,22 @@
+---
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const href = project.isPrivate ? '#projects' : `/projects/${project.slug}/`;
+---
+
+<a class="project-item" href={href} aria-label={project.isPrivate ? `${project.title} — private project` : project.title}>
+  <span class="project-number">
+    {project.isPrivate ? (
+      <img src="/assets/lock.svg" alt="Private project" width="16" height="16" />
+    ) : (
+      project.number
+    )}
+  </span>
+  <span class="project-name">{project.title}</span>
+  {project.hasExternalLink && <img class="project-icon" src="/assets/arrow-up-right.svg" alt="" width="16" height="16" />}
+</a>

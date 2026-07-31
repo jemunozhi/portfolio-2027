@@ -1,0 +1,13 @@
+---
+import { projects } from '../data/projects';
+import ProjectItem from './ProjectItem.astro';
+import SectionJump from './SectionJump.astro';
+---
+
+<section class="projects-panel" id="projects" aria-labelledby="projects-title">
+  <SectionJump href="#about">About&nbsp; ↑</SectionJump>
+
+  <div class="project-list" aria-label="Selected projects">
+    {projects.map((project) => <ProjectItem project={project} />)}
+  </div>
+</section>

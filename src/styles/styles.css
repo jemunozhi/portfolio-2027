@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap');
+
+:root {
+  --color-background: #f7f2ec;
+  --color-brand: #005d49;
+  --color-text: #202020;
+  --color-subtle: #808080;
+  --color-border: #707070;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-32: 32px;
+  --font-family: 'Montserrat', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+.site-header {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  width: 100%;
+  padding: var(--spacing-16);
+  background: var(--color-background);
+}
+
+.logo-link,
+.logo {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+.header-actions {
+  grid-column: 4;
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: var(--spacing-8);
+}
+
+.local-time {
+  color: var(--color-brand);
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.icon-button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  padding: 8px;
+  border-radius: 999px;
+  background: transparent;
+  transition: background-color 180ms ease;
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+  background: rgba(0, 93, 73, 0.1);
+}
+
+.icon-button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+}
+
+main {
+  overflow: clip;
+}
+
+.about-panel,
+.projects-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.about-panel {
+  min-height: 760px;
+  padding: var(--spacing-16) var(--spacing-16) var(--spacing-32);
+  backdrop-filter: blur(15px);
+}
+
+.about-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--spacing-16);
+}
+
+.intro-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.greeting {
+  color: var(--color-brand);
+}
+
+.greeting h1,
+.greeting p,
+.description p {
+  margin: 0;
+}
+
+.greeting h1 {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.greeting p {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.subtle-link,
+.section-jump {
+  color: var(--color-subtle);
+  text-decoration: underline;
+  text-underline-position: from-font;
+}
+
+.subtle-link {
+  align-self: flex-start;
+}
+
+.section-jump {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.projects-panel {
+  min-height: 760px;
+  justify-content: space-between;
+}
+
+.project-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 416px;
+  padding: 0 var(--spacing-16) var(--spacing-32);
+  backdrop-filter: blur(15px);
+}
+
+.project-item {
+  display: flex;
+  align-items: center;
+  min-width: 168px;
+  gap: var(--spacing-12);
+  padding: var(--spacing-12);
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.project-item:hover,
+.project-item:focus-visible {
+  color: var(--color-brand);
+  background: rgba(0, 93, 73, 0.06);
+}
+
+.project-number {
+  display: flex;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.project-number img,
+.project-icon {
+  display: block;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.project-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-icon {
+  opacity: 0.6;
+}
+
+@media (min-width: 600px) {
+  .site-header {
+    padding-inline: 24px;
+  }
+
+  .about-panel,
+  .projects-panel {
+    padding-inline: 24px;
+  }
+
+  .project-list {
+    padding-inline: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

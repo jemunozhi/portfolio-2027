@@ -1,0 +1,10 @@
+---
+interface Props {
+  href: string;
+  children: any;
+}
+
+const { href, children } = Astro.props;
+---
+
+<a class="section-jump" href={href}>{children}</a>
