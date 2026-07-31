@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap');
 
 :root {
+  --header-height: 64px;
   --color-background: #f7f2ec;
   --color-brand: #005d49;
   --color-text: #202020;
@@ -19,6 +20,8 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: var(--header-height);
 }
 
 body {
@@ -49,7 +52,8 @@ button {
 }
 
 .site-header {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 2;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -113,10 +117,15 @@ main {
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: calc(100svh - var(--header-height));
+  height: calc(100dvh - var(--header-height));
+  min-height: 0;
+  overflow: clip;
+  scroll-margin-top: var(--header-height);
+  scroll-snap-align: start;
 }
 
 .about-panel {
-  min-height: 760px;
   padding: var(--spacing-16) var(--spacing-16) var(--spacing-32);
   backdrop-filter: blur(15px);
 }
@@ -180,21 +189,44 @@ main {
 }
 
 .projects-panel {
-  min-height: 760px;
   justify-content: space-between;
 }
 
 .project-list {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  justify-content: flex-end;
-  min-height: 416px;
-  padding: 0 var(--spacing-16) var(--spacing-32);
+  justify-content: flex-start;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 var(--spacing-16);
   backdrop-filter: blur(15px);
+}
+
+.project-list::before,
+.project-list::after {
+  content: '';
+  flex: 0 0 calc(50% - 22px);
+}
+
+.project-list.is-initial {
+  justify-content: flex-end;
+}
+
+.project-list.is-initial::before,
+.project-list.is-initial::after {
+  display: none;
 }
 
 .project-item {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   min-width: 168px;
   gap: var(--spacing-12);
@@ -205,6 +237,7 @@ main {
 }
 
 .project-item:hover,
+.project-item.is-active,
 .project-item:focus-visible {
   color: var(--color-brand);
   background: rgba(0, 93, 73, 0.06);
