@@ -20,7 +20,6 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
   scroll-padding-top: var(--header-height);
 }
 
@@ -122,7 +121,6 @@ main {
   min-height: 0;
   overflow: clip;
   scroll-margin-top: var(--header-height);
-  scroll-snap-align: start;
 }
 
 .about-panel {
@@ -233,14 +231,20 @@ main {
   padding: var(--spacing-12);
   border-bottom: 1px solid var(--color-border);
   overflow: hidden;
-  transition: color 180ms ease, background-color 180ms ease;
+  transition: color 180ms ease, padding 180ms ease, border-color 180ms ease, opacity 180ms ease;
 }
 
-.project-item:hover,
+.project-item.is-disabled {
+  opacity: 0.3;
+}
+
+.project-item:hover:not(.is-disabled),
 .project-item.is-active,
-.project-item:focus-visible {
+.project-item:focus-visible:not(.is-disabled) {
   color: var(--color-brand);
-  background: rgba(0, 93, 73, 0.06);
+  border-bottom-color: var(--color-brand);
+  padding-left: var(--spacing-32);
+  opacity: 1;
 }
 
 .project-number {
@@ -252,11 +256,24 @@ main {
 }
 
 .project-number img,
-.project-icon {
+.project-icon,
+.project-active-icon {
   display: block;
   flex: 0 0 16px;
   width: 16px;
   height: 16px;
+}
+
+.project-active-icon {
+  display: none;
+}
+
+.project-item.is-active .project-number-value {
+  display: none;
+}
+
+.project-item.is-active .project-active-icon {
+  display: block;
 }
 
 .project-name {

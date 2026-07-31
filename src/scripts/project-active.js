@@ -9,23 +9,23 @@ if (projectList && projectItems.length) {
   const updateActiveProject = () => {
     const listRect = projectList.getBoundingClientRect();
     const listCenter = listRect.top + listRect.height / 2;
-    let closestItem = null;
-    let closestDistance = Infinity;
+    let activeItem = null;
 
     for (const item of projectItems) {
       const itemRect = item.getBoundingClientRect();
-      const itemCenter = itemRect.top + itemRect.height / 2;
-      const distance = Math.abs(itemCenter - listCenter);
 
-      if (distance < closestDistance) {
-        closestItem = item;
-        closestDistance = distance;
+      if (itemRect.top <= listCenter && itemRect.bottom >= listCenter) {
+        activeItem = item;
+        break;
       }
     }
 
+    const hasActiveItem = Boolean(activeItem);
+
     for (const item of projectItems) {
-      const isActive = item === closestItem;
+      const isActive = item === activeItem;
       item.classList.toggle('is-active', isActive);
+      item.classList.toggle('is-disabled', hasActiveItem && !isActive);
 
       if (isActive) {
         item.setAttribute('aria-current', 'true');

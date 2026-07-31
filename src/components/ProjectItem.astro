@@ -11,11 +11,16 @@ const href = project.isPrivate ? '#projects' : `/projects/${project.slug}/`;
 
 <a class="project-item" href={href} aria-label={project.isPrivate ? `${project.title} — private project` : project.title}>
   <span class="project-number">
-    {project.isPrivate ? (
-      <img src="/assets/lock.svg" alt="Private project" width="16" height="16" />
-    ) : (
-      project.number
-    )}
+    <span class="project-number-value">
+      {project.isPrivate ? (
+        <img src="/assets/lock.svg" alt="Private project" width="16" height="16" />
+      ) : (
+        project.number
+      )}
+    </span>
+    <svg class="project-active-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor" />
+    </svg>
   </span>
   <span class="project-name">{project.title}</span>
   {project.hasExternalLink && <img class="project-icon" src="/assets/arrow-up-right.svg" alt="" width="16" height="16" />}
