@@ -1,5 +1,7 @@
 ---
 import { projects } from '../data/projects';
+import CaseDetails from './CaseDetails.astro';
+import Footer from './Footer.astro';
 import ProjectItem from './ProjectItem.astro';
 import SectionJump from './SectionJump.astro';
 ---
@@ -7,7 +9,13 @@ import SectionJump from './SectionJump.astro';
 <section class="projects-panel" id="projects" aria-labelledby="projects-title">
   <SectionJump href="#about">About&nbsp; ↑</SectionJump>
 
-  <div class="project-list is-initial" aria-label="Selected projects">
-    {projects.map((project) => <ProjectItem project={project} />)}
+  <div class="project-list-container">
+    <div class="project-list is-initial" aria-label="Selected projects">
+      {projects.map((project) => <ProjectItem project={project} />)}
+      <div class="project-footer-trigger" data-footer-trigger aria-hidden="true"></div>
+    </div>
+
+    <CaseDetails />
+    <Footer />
   </div>
 </section>

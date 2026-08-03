@@ -1,6 +1,14 @@
+const projectPanel = document.querySelector('.projects-panel');
+const projectListContainer = document.querySelector('.project-list-container');
 const projectList = document.querySelector('.project-list');
+const caseDetails = document.querySelector('[data-case-details]');
+const caseTitle = caseDetails?.querySelector('[data-case-title]');
+const caseDescription = caseDetails?.querySelector('[data-case-description]');
+const caseTags = caseDetails?.querySelector('[data-case-tags]');
+const footerTrigger = projectList?.querySelector('[data-footer-trigger]');
+const siteFooter = projectListContainer?.querySelector('[data-site-footer]');
 const projectItems = projectList
-  ? [...projectList.querySelectorAll('.project-item')]
+  ? [...projectList.querySelectorAll('.project-item, [data-footer-trigger]')]
   : [];
 
 if (projectList && projectItems.length) {
@@ -21,6 +29,7 @@ if (projectList && projectItems.length) {
     }
 
     const hasActiveItem = Boolean(activeItem);
+    const isFooterActive = activeItem === footerTrigger;
 
     for (const item of projectItems) {
       const isActive = item === activeItem;
@@ -33,6 +42,30 @@ if (projectList && projectItems.length) {
         item.removeAttribute('aria-current');
       }
     }
+
+    projectPanel?.classList.toggle('has-active-project', hasActiveItem && !isFooterActive);
+    projectPanel?.classList.toggle('has-active-footer', isFooterActive);
+
+    if (caseDetails) {
+      caseDetails.hidden = !hasActiveItem || isFooterActive;
+    }
+
+    if (siteFooter) {
+      siteFooter.hidden = !isFooterActive;
+      siteFooter.classList.toggle('is-visible', isFooterActive);
+    }
+
+    if (!activeItem || isFooterActive) return;
+
+    caseTitle.textContent = activeItem.dataset.caseTitle;
+    caseDescription.textContent = activeItem.dataset.caseDescription;
+    const tags = activeItem.dataset.caseTags?.split('|').filter(Boolean) ?? [];
+    caseTags.replaceChildren(...tags.map((tag) => {
+      const tagElement = document.createElement('li');
+      tagElement.textContent = tag;
+      return tagElement;
+    }));
+    caseTags.hidden = tags.length === 0;
   };
 
   const activateCenteredMode = () => {
@@ -57,4 +90,5 @@ if (projectList && projectItems.length) {
   projectList.addEventListener('touchstart', activateCenteredMode, { passive: true });
   projectList.addEventListener('wheel', activateCenteredMode, { passive: true });
   window.addEventListener('resize', requestActiveProjectUpdate);
+  window.addEventListener('scroll', requestActiveProjectUpdate, { passive: true });
 }

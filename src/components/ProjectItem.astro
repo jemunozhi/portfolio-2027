@@ -10,11 +10,26 @@ const base = import.meta.env.BASE_URL;
 const href = project.isPrivate ? '#projects' : `${base}projects/${project.slug}/`;
 ---
 
-<a class="project-item" href={href} aria-label={project.isPrivate ? `${project.title} — private project` : project.title}>
+<a
+  class="project-item"
+  href={href}
+  aria-label={project.isPrivate ? `${project.title} — private project` : project.title}
+  data-case-title={project.title}
+  data-case-description={project.description ?? 'Case study details coming soon.'}
+  data-case-tags={project.tags?.join('|') ?? ''}
+>
   <span class="project-number">
     <span class="project-number-value">
       {project.isPrivate ? (
-        <img src={`${base}assets/lock.svg`} alt="Private project" width="16" height="16" />
+        project.hasNorthEastIcon ? (
+          <svg class="project-north-east-icon" width="16" height="16" viewBox="0 0 24 24" aria-label="Open project" role="img">
+            <path d="M5 5v2h10.59L4 18.59 5.41 20 17 8.41V19h2V5H5Z" fill="currentColor" />
+          </svg>
+        ) : (
+          <svg class="project-lock-icon" width="16" height="16" viewBox="0 0 24 24" aria-label="Private project" role="img">
+            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2Zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2Zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2Z" fill="currentColor" />
+          </svg>
+        )
       ) : (
         project.number
       )}
@@ -24,5 +39,9 @@ const href = project.isPrivate ? '#projects' : `${base}projects/${project.slug}/
     </svg>
   </span>
   <span class="project-name">{project.title}</span>
-  {project.hasExternalLink && <img class="project-icon" src={`${base}assets/arrow-up-right.svg`} alt="" width="16" height="16" />}
+  {project.hasLockIcon && (
+    <svg class="project-icon project-lock-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2Zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2Zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2Z" fill="currentColor" />
+    </svg>
+  )}
 </a>
