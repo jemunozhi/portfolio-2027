@@ -1,6 +1,7 @@
 const projectPanel = document.querySelector('.projects-panel');
 const projectListContainer = document.querySelector('.project-list-container');
 const projectList = document.querySelector('.project-list');
+const scrollContainer = projectList || projectListContainer;
 const caseDetails = document.querySelector('[data-case-details]');
 const caseTitle = caseDetails?.querySelector('[data-case-title]');
 const caseDescription = caseDetails?.querySelector('[data-case-description]');
@@ -14,7 +15,6 @@ const projectItems = projectList
 if (projectList && projectItems.length) {
   let frameRequested = false;
   let previousActiveProject = null;
-  let detailsTransitionTimer;
 
   const renderCaseDetails = (item) => {
     caseTitle.textContent = item.dataset.caseTitle;
@@ -32,8 +32,6 @@ if (projectList && projectItems.length) {
   const updateCaseDetails = (item, shouldAnimate) => {
     if (!caseDetails) return;
 
-    window.clearTimeout(detailsTransitionTimer);
-
     if (!item) {
       caseDetails.hidden = true;
       previousActiveProject = null;
@@ -48,10 +46,8 @@ if (projectList && projectItems.length) {
     }
 
     caseDetails.classList.add('is-changing');
-    detailsTransitionTimer = window.setTimeout(() => {
-      renderCaseDetails(item);
-      requestAnimationFrame(() => caseDetails.classList.remove('is-changing'));
-    }, 180);
+    renderCaseDetails(item);
+    requestAnimationFrame(() => caseDetails.classList.remove('is-changing'));
   };
 
   const updateProjectsView = () => {
@@ -62,19 +58,28 @@ if (projectList && projectItems.length) {
     const isProjectsView = panelRect.top <= headerHeight && panelRect.bottom > headerHeight;
 
     document.body.classList.toggle('is-projects-view', isProjectsView);
+
+    if (isProjectsView && projectList.classList.contains('is-initial')) {
+      projectList.classList.remove('is-initial');
+      projectList.scrollTop = 0;
+      updateActiveProject();
+    }
   };
 
   const updateActiveProject = () => {
-    const listRect = projectList.getBoundingClientRect();
+    const isProjectsView = document.body.classList.contains('is-projects-view');
+    const listRect = scrollContainer.getBoundingClientRect();
     const listCenter = listRect.top + listRect.height / 2;
     let activeItem = null;
 
-    for (const item of projectItems) {
-      const itemRect = item.getBoundingClientRect();
+    if (isProjectsView) {
+      for (const item of projectItems) {
+        const itemRect = item.getBoundingClientRect();
 
-      if (itemRect.top <= listCenter && itemRect.bottom >= listCenter) {
-        activeItem = item;
-        break;
+        if (itemRect.top <= listCenter && itemRect.bottom >= listCenter) {
+          activeItem = item;
+          break;
+        }
       }
     }
 
@@ -93,8 +98,19 @@ if (projectList && projectItems.length) {
       }
     }
 
+    const hasBackgroundImage = Boolean(activeItem?.dataset.backgroundImage);
     projectPanel?.classList.toggle('has-active-project', hasActiveItem && !isFooterActive);
     projectPanel?.classList.toggle('has-active-footer', isFooterActive);
+    projectPanel?.classList.toggle(
+      'has-no-project-background',
+      hasActiveItem && !isFooterActive && !hasBackgroundImage,
+    );
+
+    const backgroundImage = activeItem?.dataset.backgroundImage;
+    projectPanel?.style.setProperty(
+      '--project-background-image',
+      backgroundImage ? `url("${backgroundImage}")` : 'none',
+    );
 
     const nextActiveProject = hasActiveItem && !isFooterActive ? activeItem : null;
     const shouldAnimateDetails = Boolean(
@@ -122,16 +138,16 @@ if (projectList && projectItems.length) {
 
     frameRequested = true;
     requestAnimationFrame(() => {
-      updateActiveProject();
       updateProjectsView();
+      updateActiveProject();
       frameRequested = false;
     });
   };
 
-  projectList.addEventListener('scroll', requestActiveProjectUpdate, { passive: true });
-  projectList.addEventListener('pointerdown', activateCenteredMode, { passive: true });
-  projectList.addEventListener('touchstart', activateCenteredMode, { passive: true });
-  projectList.addEventListener('wheel', activateCenteredMode, { passive: true });
+  scrollContainer.addEventListener('scroll', requestActiveProjectUpdate, { passive: true });
+  scrollContainer.addEventListener('pointerdown', activateCenteredMode, { passive: true });
+  scrollContainer.addEventListener('touchstart', activateCenteredMode, { passive: true });
+  scrollContainer.addEventListener('wheel', activateCenteredMode, { passive: true });
   window.addEventListener('resize', requestActiveProjectUpdate);
   window.addEventListener('scroll', requestActiveProjectUpdate, { passive: true });
   updateProjectsView();

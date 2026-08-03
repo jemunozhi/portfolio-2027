@@ -17,6 +17,7 @@ const href = project.isPrivate ? '#projects' : `${base}projects/${project.slug}/
   data-case-title={project.title}
   data-case-description={project.description ?? 'Case study details coming soon.'}
   data-case-tags={project.tags?.join('|') ?? ''}
+  data-background-image={project.backgroundImage ? `${base}${project.backgroundImage}` : undefined}
 >
   <span class="project-number">
     <span class="project-number-value">

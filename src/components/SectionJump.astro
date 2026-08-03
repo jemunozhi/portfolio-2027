@@ -6,4 +6,4 @@ interface Props {
 const { href } = Astro.props;
 ---
 
-<a class="section-jump" href={href}><slot /></a>
+<a class="section-jump" href={href} data-section-jump={href.replace('#', '')}><slot /></a>
