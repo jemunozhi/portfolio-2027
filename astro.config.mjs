@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 
-export default defineConfig(({ command }) => ({
+export default defineConfig({
   site: 'https://jemunozhi.github.io',
-  base: command === 'build' ? '/portfolio-2027/' : '/',
-}));
+  base: process.env.ASTRO_BASE ?? '/',
+});
