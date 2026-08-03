@@ -1,15 +1,41 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
 <header class="site-header" aria-label="Primary navigation">
-  <a class="logo-link" href="/" aria-label="Julian Munoz home">
-    <img class="logo" src="/assets/jm-logo.svg" alt="JM" width="32" height="32" />
+  <a class="logo-link" href={base} aria-label="Julian Munoz home">
+    <img class="logo" src={`${base}assets/jm-logo.svg`} alt="JM" width="32" height="32" />
   </a>
 
   <div class="header-actions">
-    <time class="local-time" datetime="00:00">BOG&nbsp;&nbsp;00:00&nbsp;&nbsp;PM</time>
+    <div class="local-times" aria-label="Local times">
+      <time class="local-time" datetime="00:00" data-time-zone="America/Bogota" aria-label="Bogotá local time">
+        <span>BOG</span>
+        <span class="clock-value">
+          <span data-clock-hours>00</span><span class="clock-separator" aria-hidden="true">:</span><span data-clock-minutes>00</span>
+        </span>
+        <span data-clock-period>PM</span>
+      </time>
+      <time class="local-time is-hidden" datetime="00:00" data-time-zone="America/New_York" aria-label="New York local time" hidden>
+        <span>NY</span>
+        <span class="clock-value">
+          <span data-clock-hours>00</span><span class="clock-separator" aria-hidden="true">:</span><span data-clock-minutes>00</span>
+        </span>
+        <span data-clock-period>PM</span>
+      </time>
+      <time class="local-time is-hidden" datetime="00:00" data-time-zone="Europe/London" aria-label="London local time" hidden>
+        <span>LDN</span>
+        <span class="clock-value">
+          <span data-clock-hours>00</span><span class="clock-separator" aria-hidden="true">:</span><span data-clock-minutes>00</span>
+        </span>
+        <span data-clock-period>PM</span>
+      </time>
+    </div>
     <a class="icon-button" href="mailto:hello@julian-munoz.com" aria-label="Get in touch">
-      <img src="/assets/mail.svg" alt="" width="16" height="16" />
+      <img src={`${base}assets/mail.svg`} alt="" width="16" height="16" />
     </a>
     <button class="icon-button" type="button" aria-label="Change color theme">
-      <img src="/assets/theme.svg" alt="" width="16" height="16" />
+      <img src={`${base}assets/theme.svg`} alt="" width="16" height="16" />
     </button>
   </div>
 </header>

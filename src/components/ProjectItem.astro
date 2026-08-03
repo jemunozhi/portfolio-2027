@@ -6,14 +6,15 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const href = project.isPrivate ? '#projects' : `/projects/${project.slug}/`;
+const base = import.meta.env.BASE_URL;
+const href = project.isPrivate ? '#projects' : `${base}projects/${project.slug}/`;
 ---
 
 <a class="project-item" href={href} aria-label={project.isPrivate ? `${project.title} — private project` : project.title}>
   <span class="project-number">
     <span class="project-number-value">
       {project.isPrivate ? (
-        <img src="/assets/lock.svg" alt="Private project" width="16" height="16" />
+        <img src={`${base}assets/lock.svg`} alt="Private project" width="16" height="16" />
       ) : (
         project.number
       )}
@@ -23,5 +24,5 @@ const href = project.isPrivate ? '#projects' : `/projects/${project.slug}/`;
     </svg>
   </span>
   <span class="project-name">{project.title}</span>
-  {project.hasExternalLink && <img class="project-icon" src="/assets/arrow-up-right.svg" alt="" width="16" height="16" />}
+  {project.hasExternalLink && <img class="project-icon" src={`${base}assets/arrow-up-right.svg`} alt="" width="16" height="16" />}
 </a>
