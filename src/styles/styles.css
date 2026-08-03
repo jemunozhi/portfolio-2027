@@ -259,7 +259,13 @@ main {
 .projects-panel {
   height: 100svh;
   height: 100dvh;
+  min-height: 100svh;
+  min-height: 100dvh;
   justify-content: space-between;
+}
+
+body.is-projects-view .about-panel {
+  visibility: hidden;
 }
 
 .projects-panel.has-active-project {
@@ -428,6 +434,12 @@ main {
   gap: var(--spacing-16);
   align-self: stretch;
   color: #fff;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.case-details.is-changing {
+  opacity: 0;
+  transform: translateY(8px);
 }
 
 .case-details[hidden] {

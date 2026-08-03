@@ -13,6 +13,56 @@ const projectItems = projectList
 
 if (projectList && projectItems.length) {
   let frameRequested = false;
+  let previousActiveProject = null;
+  let detailsTransitionTimer;
+
+  const renderCaseDetails = (item) => {
+    caseTitle.textContent = item.dataset.caseTitle;
+    caseDescription.textContent = item.dataset.caseDescription;
+    const tags = item.dataset.caseTags?.split('|').filter(Boolean) ?? [];
+
+    caseTags.replaceChildren(...tags.map((tag) => {
+      const tagElement = document.createElement('li');
+      tagElement.textContent = tag;
+      return tagElement;
+    }));
+    caseTags.hidden = tags.length === 0;
+  };
+
+  const updateCaseDetails = (item, shouldAnimate) => {
+    if (!caseDetails) return;
+
+    window.clearTimeout(detailsTransitionTimer);
+
+    if (!item) {
+      caseDetails.hidden = true;
+      previousActiveProject = null;
+      return;
+    }
+
+    caseDetails.hidden = false;
+
+    if (!shouldAnimate) {
+      renderCaseDetails(item);
+      return;
+    }
+
+    caseDetails.classList.add('is-changing');
+    detailsTransitionTimer = window.setTimeout(() => {
+      renderCaseDetails(item);
+      requestAnimationFrame(() => caseDetails.classList.remove('is-changing'));
+    }, 180);
+  };
+
+  const updateProjectsView = () => {
+    const headerHeight = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue('--header-height'),
+    ) || 0;
+    const panelRect = projectPanel.getBoundingClientRect();
+    const isProjectsView = panelRect.top <= headerHeight && panelRect.bottom > headerHeight;
+
+    document.body.classList.toggle('is-projects-view', isProjectsView);
+  };
 
   const updateActiveProject = () => {
     const listRect = projectList.getBoundingClientRect();
@@ -46,26 +96,18 @@ if (projectList && projectItems.length) {
     projectPanel?.classList.toggle('has-active-project', hasActiveItem && !isFooterActive);
     projectPanel?.classList.toggle('has-active-footer', isFooterActive);
 
-    if (caseDetails) {
-      caseDetails.hidden = !hasActiveItem || isFooterActive;
-    }
+    const nextActiveProject = hasActiveItem && !isFooterActive ? activeItem : null;
+    const shouldAnimateDetails = Boolean(
+      nextActiveProject && previousActiveProject && nextActiveProject !== previousActiveProject,
+    );
+
+    updateCaseDetails(nextActiveProject, shouldAnimateDetails);
+    previousActiveProject = nextActiveProject;
 
     if (siteFooter) {
       siteFooter.hidden = !isFooterActive;
       siteFooter.classList.toggle('is-visible', isFooterActive);
     }
-
-    if (!activeItem || isFooterActive) return;
-
-    caseTitle.textContent = activeItem.dataset.caseTitle;
-    caseDescription.textContent = activeItem.dataset.caseDescription;
-    const tags = activeItem.dataset.caseTags?.split('|').filter(Boolean) ?? [];
-    caseTags.replaceChildren(...tags.map((tag) => {
-      const tagElement = document.createElement('li');
-      tagElement.textContent = tag;
-      return tagElement;
-    }));
-    caseTags.hidden = tags.length === 0;
   };
 
   const activateCenteredMode = () => {
@@ -81,6 +123,7 @@ if (projectList && projectItems.length) {
     frameRequested = true;
     requestAnimationFrame(() => {
       updateActiveProject();
+      updateProjectsView();
       frameRequested = false;
     });
   };
@@ -91,4 +134,5 @@ if (projectList && projectItems.length) {
   projectList.addEventListener('wheel', activateCenteredMode, { passive: true });
   window.addEventListener('resize', requestActiveProjectUpdate);
   window.addEventListener('scroll', requestActiveProjectUpdate, { passive: true });
+  updateProjectsView();
 }
